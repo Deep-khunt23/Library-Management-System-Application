@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LMS Pro — Modern Desktop Library Management System</title>
+  <meta name="description" content="A sleek, offline-first desktop application built with Python, CustomTkinter, and SQLite. Manage books, patrons, 14-day loans, and overdue fines effortlessly.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            },
+            slate: {
+              850: '#0f172a',
+              900: '#0b1120',
+              950: '#060a14',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .hero-glow {
+      background: radial-gradient(circle 500px at 50% 20%, rgba(37, 99, 235, 0.18), transparent 80%);
+    }
+    .badge-glow {
+      box-shadow: 0 0 20px -3px rgba(59, 130, 246, 0.4);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-brand-600 selection:text-white min-h-screen hero-glow">
+
+  <!-- Header / Navigation -->
+  <header class="sticky top-0 z-50 glass-card border-b border-slate-800/80 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-xl shadow-lg shadow-brand-500/25">
+          📚
+        </div>
+        <div>
+          <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">LMS Pro</span>
+          <span class="text-xs ml-2 px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30 font-medium">Desktop v1.0</span>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+        <a href="#features" class="hover:text-brand-400 transition-colors">Features</a>
+        <a href="#preview" class="hover:text-brand-400 transition-colors">App Preview</a>
+        <a href="#rules" class="hover:text-brand-400 transition-colors">Business Logic</a>
+        <a href="#quickstart" class="hover:text-brand-400 transition-colors">Installation</a>
+        <a href="#faq" class="hover:text-brand-400 transition-colors">FAQ</a>
+      </nav>
+
+      <div class="flex items-center space-x-4">
+        <a href="#download" class="inline-flex items-center space-x-2 bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-lg shadow-brand-600/30 transition-all hover:scale-105 active:scale-95">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.949-1.801"/></svg>
+          <span>Download .exe</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative pt-20 pb-16 px-6 overflow-hidden text-center">
+    <div class="max-w-4xl mx-auto">
+      <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-brand-500/30 text-brand-300 text-xs font-semibold uppercase tracking-wider mb-6 badge-glow">
+        <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+        <span>Built with Python & CustomTkinter</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight mb-6">
+        Library Management, <br class="hidden sm:block">
+        <span class="bg-gradient-to-r from-brand-400 via-teal-300 to-indigo-400 bg-clip-text text-transparent">Fast, Modern & Offline-First</span>
+      </h1>
+
+      <p class="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+        Say goodbye to messy spreadsheets. LMS Pro gives librarians a modern desktop command center with automated lending rules, zero-setup SQLite storage, and instant overdue fine calculations.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16" id="download">
+        <a href="./LibraryManagementSystem.exe" download class="w-full sm:w-auto inline-flex items-center justify-center space-x-3 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-bold text-base px-8 py-4 rounded-xl shadow-xl shadow-brand-500/30 transition-all hover:scale-105 active:scale-95">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.949-1.801"/></svg>
+          <div class="text-left">
+            <div class="text-xs font-normal text-brand-100">Standalone Windows Executable</div>
+            <div class="leading-none text-base">Download for Windows (.exe)</div>
+          </div>
+        </a>
+
+        <a href="https://github.com" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 glass-card hover:bg-slate-800 text-slate-200 font-semibold text-base px-7 py-4 rounded-xl border border-slate-700/80 transition-all hover:scale-105">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span>View Source on GitHub</span>
+        </a>
+      </div>
+
+      <!-- Quick Highlights Bar -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto pt-6 border-t border-slate-800/60 text-slate-400 text-sm">
+        <div class="flex items-center justify-center space-x-2">
+          <span class="text-brand-400 font-bold">✓</span> <span>Zero Configuration</span>
+        </div>
+        <div class="flex items-center justify-center space-x-2">
+          <span class="text-teal-400 font-bold">✓</span> <span>No Cloud Required</span>
+        </div>
+        <div class="flex items-center justify-center space-x-2">
+          <span class="text-indigo-400 font-bold">✓</span> <span>SQLite Embedded</span>
+        </div>
+        <div class="flex items-center justify-center space-x-2">
+          <span class="text-rose-400 font-bold">✓</span> <span>11.5 MB Standalone</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Mockup / Preview Section -->
+  <section id="preview" class="py-16 px-6 max-w-6xl mx-auto">
+    <div class="glass-card rounded-2xl p-6 sm:p-8 shadow-2xl border border-slate-700/80">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+          <div class="w-3.5 h-3.5 rounded-full bg-rose-500/80"></div>
+          <div class="w-3.5 h-3.5 rounded-full bg-amber-500/80"></div>
+          <div class="w-3.5 h-3.5 rounded-full bg-emerald-500/80"></div>
+          <span class="text-xs text-slate-400 font-mono ml-3">Library Management System — [1180x720 Modern Desktop UI]</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span class="px-2.5 py-1 rounded bg-slate-800 text-xs text-slate-300 font-mono">Theme: Dark / Light</span>
+        </div>
+      </div>
+
+      <!-- Simulated UI Layout -->
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-12 gap-6">
+        <!-- Sidebar Mockup -->
+        <div class="md:col-span-3 bg-slate-900/90 rounded-xl p-4 border border-slate-800 space-y-2">
+          <div class="text-xs font-bold text-slate-400 tracking-wider uppercase mb-3">Sidebar Menu</div>
+          <div class="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-brand-600 text-white font-semibold text-sm">
+            <span>📊</span> <span>Dashboard</span>
+          </div>
+          <div class="flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 text-sm">
+            <span>➕</span> <span>Add Book</span>
+          </div>
+          <div class="flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 text-sm">
+            <span>📚</span> <span>Manage Books</span>
+          </div>
+          <div class="flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 text-sm">
+            <span>👤</span> <span>Register Member</span>
+          </div>
+          <div class="flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 text-sm">
+            <span>👥</span> <span>Manage Members</span>
+          </div>
+          <div class="flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 text-sm">
+            <span>🔄</span> <span>Issue Book</span>
+          </div>
+          <div class="flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 text-sm">
+            <span>📥</span> <span>Return Book</span>
+          </div>
+          <div class="flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 text-sm">
+            <span>🔍</span> <span>Search Books</span>
+          </div>
+        </div>
+
+        <!-- Dashboard Content Mockup -->
+        <div class="md:col-span-9 space-y-6">
+          <!-- 4 KPI Cards -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="bg-slate-900/80 p-4 rounded-xl border-t-4 border-brand-500 border-x border-b border-slate-800">
+              <div class="text-xs text-slate-400">Total Books</div>
+              <div class="text-2xl font-bold text-brand-400 mt-1">7 Titles</div>
+              <div class="text-xs text-slate-500 mt-0.5">25 copies in stock</div>
+            </div>
+            <div class="bg-slate-900/80 p-4 rounded-xl border-t-4 border-teal-500 border-x border-b border-slate-800">
+              <div class="text-xs text-slate-400">Members</div>
+              <div class="text-2xl font-bold text-teal-400 mt-1">4 Readers</div>
+              <div class="text-xs text-slate-500 mt-0.5">Verified active</div>
+            </div>
+            <div class="bg-slate-900/80 p-4 rounded-xl border-t-4 border-amber-500 border-x border-b border-slate-800">
+              <div class="text-xs text-slate-400">Active Loans</div>
+              <div class="text-2xl font-bold text-amber-400 mt-1">3 Books</div>
+              <div class="text-xs text-slate-500 mt-0.5">Currently issued</div>
+            </div>
+            <div class="bg-slate-900/80 p-4 rounded-xl border-t-4 border-rose-500 border-x border-b border-slate-800">
+              <div class="text-xs text-slate-400">Overdue</div>
+              <div class="text-2xl font-bold text-rose-400 mt-1">1 Book</div>
+              <div class="text-xs text-slate-500 mt-0.5">Fine: ₹15.00</div>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 flex flex-wrap gap-3 items-center">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-2">⚡ Quick Actions:</span>
+            <span class="px-3 py-1.5 rounded-lg bg-brand-600/20 text-brand-400 border border-brand-500/30 text-xs font-medium">🔄 Issue Book</span>
+            <span class="px-3 py-1.5 rounded-lg bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 text-xs font-medium">📥 Return Book</span>
+            <span class="px-3 py-1.5 rounded-lg bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 text-xs font-medium">➕ Add Book</span>
+            <span class="px-3 py-1.5 rounded-lg bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 text-xs font-medium">👤 Register Member</span>
+          </div>
+
+          <!-- Table Preview -->
+          <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800">
+            <div class="text-xs font-bold text-slate-400 uppercase mb-3">Recent Lending Activity</div>
+            <div class="overflow-x-auto text-xs">
+              <table class="w-full text-left font-mono">
+                <thead>
+                  <tr class="text-slate-400 border-b border-slate-800 pb-2">
+                    <th class="py-2">Tx ID</th>
+                    <th>Borrower</th>
+                    <th>Book Title</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Fine</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60">
+                  <tr>
+                    <td class="py-2 text-slate-400">#01</td>
+                    <td class="text-slate-200">Alice Johnson</td>
+                    <td>Clean Code</td>
+                    <td>In 10 days</td>
+                    <td><span class="text-brand-400">Issued</span></td>
+                    <td>₹0.00</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 text-slate-400">#02</td>
+                    <td class="text-slate-200">Bob Smith</td>
+                    <td>1984</td>
+                    <td class="text-rose-400 font-bold">3 days late</td>
+                    <td><span class="text-rose-400">Overdue</span></td>
+                    <td class="text-rose-400 font-bold">₹15.00</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 text-slate-400">#03</td>
+                    <td class="text-slate-200">David Miller</td>
+                    <td>Sapiens</td>
+                    <td>Returned</td>
+                    <td><span class="text-emerald-400">Returned</span></td>
+                    <td>₹0.00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-20 px-6 max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-xs font-bold uppercase tracking-widest text-brand-400 mb-3">Enterprise Core Features</h2>
+      <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Engineered for Reliability and Everyday Ease</h3>
+      <p class="text-slate-400 mt-4 text-base">Designed for schools, colleges, community centers, and personal collections that want high reliability without complicated cloud logins.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Card 1 -->
+      <div class="glass-card rounded-2xl p-8 hover:border-brand-500/50 transition-all hover:-translate-y-1">
+        <div class="w-12 h-12 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center text-2xl mb-6">
+          📊
+        </div>
+        <h4 class="text-xl font-bold text-white mb-3">Live KPI Dashboard</h4>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Four distinct metric panels keep you updated on total titles, physical copies, registered readers, active borrow counts, and overdue fines at a glance.
+        </p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="glass-card rounded-2xl p-8 hover:border-brand-500/50 transition-all hover:-translate-y-1">
+        <div class="w-12 h-12 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center text-2xl mb-6">
+          📚
+        </div>
+        <h4 class="text-xl font-bold text-white mb-3">Sortable Inventory Catalog</h4>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Click any column header to sort titles, authors, categories, ISBNs, or stock numbers ascending or descending. Full-text search filters rows in real time.
+        </p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="glass-card rounded-2xl p-8 hover:border-brand-500/50 transition-all hover:-translate-y-1">
+        <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl mb-6">
+          🛡️
+        </div>
+        <h4 class="text-xl font-bold text-white mb-3">3-Book Borrow Limit</h4>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Enforces maximum fairness. Patrons holding 3 active unreturned books are blocked from borrowing more until previous books are returned.
+        </p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="glass-card rounded-2xl p-8 hover:border-brand-500/50 transition-all hover:-translate-y-1">
+        <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl mb-6">
+          💰
+        </div>
+        <h4 class="text-xl font-bold text-white mb-3">Automated Fine Engine</h4>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Calculates late fees at ₹5.00 per day past the 14-day loan schedule. Shows instant popup receipts with overdue days and exact fine totals.
+        </p>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="glass-card rounded-2xl p-8 hover:border-brand-500/50 transition-all hover:-translate-y-1">
+        <div class="w-12 h-12 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-2xl mb-6">
+          🔒
+        </div>
+        <h4 class="text-xl font-bold text-white mb-3">Active Loan Delete Guards</h4>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Prevents accidental data loss. Neither books with active loans nor patrons with unreturned materials can be deleted until books are safely returned.
+        </p>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="glass-card rounded-2xl p-8 hover:border-brand-500/50 transition-all hover:-translate-y-1">
+        <div class="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-2xl mb-6">
+          🌓
+        </div>
+        <h4 class="text-xl font-bold text-white mb-3">Dark & Light Mode Switcher</h4>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          CustomTkinter provides smooth transition between sleek Dark Mode and high-contrast Light Mode, dynamically adapting treeviews and cards.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Business Rules Section -->
+  <section id="rules" class="py-16 px-6 max-w-5xl mx-auto">
+    <div class="glass-card rounded-3xl p-8 sm:p-12 border border-slate-800">
+      <h3 class="text-2xl sm:text-3xl font-bold text-white mb-8 text-center">Built-In Verification & Business Rules</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+        <div class="flex space-x-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800/80">
+          <div class="text-xl">🛑</div>
+          <div>
+            <div class="font-bold text-slate-200">Out of Stock Prevention</div>
+            <div class="text-slate-400 mt-1">If a book's <code class="text-brand-400 font-mono">available_copies &lt;= 0</code>, issue is blocked with <em>"No copies available"</em>.</div>
+          </div>
+        </div>
+
+        <div class="flex space-x-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800/80">
+          <div class="text-xl">🪪</div>
+          <div>
+            <div class="font-bold text-slate-200">Email Format & Uniqueness</div>
+            <div class="text-slate-400 mt-1">Regex validates <code class="text-brand-400 font-mono">user@domain.com</code> and prevents duplicate registrations in SQLite.</div>
+          </div>
+        </div>
+
+        <div class="flex space-x-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800/80">
+          <div class="text-xl">📅</div>
+          <div>
+            <div class="font-bold text-slate-200">Automatic 14-Day Lending Cycle</div>
+            <div class="text-slate-400 mt-1">Loans automatically timestamp issue date as today and set due date to exactly <code class="text-brand-400 font-mono">today + 14 days</code>.</div>
+          </div>
+        </div>
+
+        <div class="flex space-x-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800/80">
+          <div class="text-xl">🛡️</div>
+          <div>
+            <div class="font-bold text-slate-200">Foreign Key Integrity</div>
+            <div class="text-slate-400 mt-1">Transactions map directly to Book and Member tables with <code class="text-brand-400 font-mono">PRAGMA foreign_keys = ON</code>.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quickstart Installation Section -->
+  <section id="quickstart" class="py-16 px-6 max-w-4xl mx-auto">
+    <div class="text-center mb-12">
+      <h2 class="text-xs font-bold uppercase tracking-widest text-brand-400 mb-2">Getting Started</h2>
+      <h3 class="text-3xl font-extrabold text-white">3 Simple Steps to Run</h3>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="glass-card rounded-2xl p-6 text-center">
+        <div class="w-10 h-10 rounded-full bg-brand-500/20 text-brand-400 font-bold flex items-center justify-center mx-auto mb-4">1</div>
+        <h4 class="font-bold text-white mb-2">Download .exe</h4>
+        <p class="text-slate-400 text-xs">Download the pre-compiled <code class="text-brand-400 font-mono">LibraryManagementSystem.exe</code> (11.5 MB).</p>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6 text-center">
+        <div class="w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 font-bold flex items-center justify-center mx-auto mb-4">2</div>
+        <h4 class="font-bold text-white mb-2">Double-Click to Launch</h4>
+        <p class="text-slate-400 text-xs">No installation wizard or Python setup required. It starts immediately in seconds.</p>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6 text-center">
+        <div class="w-10 h-10 rounded-full bg-indigo-500/20 text-indigo-400 font-bold flex items-center justify-center mx-auto mb-4">3</div>
+        <h4 class="font-bold text-white mb-2">Instant Demo Data</h4>
+        <p class="text-slate-400 text-xs">The app automatically initializes <code class="text-brand-400 font-mono">library.db</code> with sample books and transactions ready to test.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="py-16 px-6 max-w-4xl mx-auto">
+    <div class="text-center mb-12">
+      <h2 class="text-xs font-bold uppercase tracking-widest text-brand-400 mb-2">FAQ</h2>
+      <h3 class="text-3xl font-extrabold text-white">Frequently Asked Questions</h3>
+    </div>
+
+    <div class="space-y-4">
+      <div class="glass-card rounded-xl p-6">
+        <h4 class="font-bold text-white mb-2">Does this application require an active Internet connection?</h4>
+        <p class="text-slate-400 text-sm leading-relaxed">No. LMS Pro is 100% offline-first. All data is securely stored locally in an embedded SQLite database (<code class="text-brand-400 font-mono">library.db</code>) right beside the executable.</p>
+      </div>
+
+      <div class="glass-card rounded-xl p-6">
+        <h4 class="font-bold text-white mb-2">Can I back up or transfer the database to another PC?</h4>
+        <p class="text-slate-400 text-sm leading-relaxed">Yes! Simply copy the <code class="text-brand-400 font-mono">library.db</code> file to a USB drive or cloud backup. Moving it to another computer running LMS Pro restores your entire library instantly.</p>
+      </div>
+
+      <div class="glass-card rounded-xl p-6">
+        <h4 class="font-bold text-white mb-2">Can I run this from source code using Python?</h4>
+        <p class="text-slate-400 text-sm leading-relaxed">Yes. Run <code class="text-brand-400 font-mono">pip install -r requirements.txt</code> followed by <code class="text-brand-400 font-mono">python main.py</code> to launch from source or make modifications.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 py-10 px-6 text-center text-slate-500 text-xs">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-2">
+        <span>📚 LMS Pro</span>
+        <span>•</span>
+        <span>Open Source Library Management System</span>
+      </div>
+      <div>
+        <span>Built with Python 3, CustomTkinter & SQLite3</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
